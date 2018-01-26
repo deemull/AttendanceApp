@@ -26,15 +26,19 @@ public class Main {
             int num = rand.nextInt(11);
             absences.add(num);
         }
-        System.out.println("The absences are: " + absences);
+        System.out.println("List of absences: " + absences);
+        System.out.println("Students with perfect attendance: " + studentsWithPerfectAttends(absences));
         System.out.println("Average absences are: " + average(absences));
-        System.out.println("Percentage of perfect attendance: " + percentageOfPerfectAttends(absences) + "%");
+        System.out.println("Percentage of students with less than 3 absences and perfect attendance: " +
+                lessThan3AbsencesAndPerfectAttendance(absences));
         System.out.printf("Number of absences? ");
         int num = readInput.nextInt();
-        System.out.printf("These students had " + xAbsences(absences, num) + "absences\n");
-        System.out.printf("Absences required to FE? ");
+        System.out.printf("Students with " + num + " absences: " + xAbsences(absences, num) + "\n");
+        System.out.printf("Class meetings per week: ");
         num = readInput.nextInt();
-        System.out.printf("%f students FE'd the course", percentageOfStudentsFE(absences, num));
+        //System.out.printf("Formatted %d divided by %d is %.2f%%", num, num2, percentage);
+        System.out.printf("%f students FE'd the course", percentageOfStudentsFE(absences));
+        System.out.printf("Percentage of non-FE students: " + nonFEStudents(absences));
 
         //Collections.sort(absences);
     }
@@ -51,11 +55,23 @@ public class Main {
         return sum;
     }
 
-    private static double percentageOfPerfectAttends(ArrayList<Integer> list) {
+    private static double studentsWithPerfectAttends(ArrayList<Integer> list) {
         double count = 0;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i) == 0) {
                 count++;
+            }
+        }
+        return count;
+    }
+
+    private static double lessThan3AbsencesAndPerfectAttendance(ArrayList<Integer> list) {
+        int num = 3;
+        double count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) < num && list.get(i) == 0) {
+                count++;
+                count = count / list.size();
             }
         }
         return count;
@@ -71,13 +87,25 @@ public class Main {
         return numAbsences;
     }
 
-    private static double percentageOfStudentsFE(ArrayList<Integer> list, int num) {
+    private static double percentageOfStudentsFE(ArrayList<Integer> list) {
         ArrayList<Integer> feAbsences = new ArrayList<>();
+        int num = 3;
         int count = 0;
         for (int i = 0; i < list.size(); i++) {
-            if (num >= (list.get(i) * 2)) {
+            if (list.get(i) >= (num * 2)) {
                 count++;
                 feAbsences.add(i);
+            }
+        }
+        return count;
+    }
+
+    private static double nonFEStudents(ArrayList<Integer> list) {
+        int num = 0;
+        double count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) != percentageOfStudentsFE(list)) {
+                count = count / list.size();
             }
         }
         return count;
